@@ -3,64 +3,69 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ChatMiFan</title>
+    <title>ChatMiFan - Mạng Xã Hội Miễn Phí</title>
     <style>
         :root { --primary: #0084ff; --bg: #f0f2f5; }
-        body { font-family: Arial, sans-serif; background: var(--bg); margin: 0; }
+        body { font-family: Arial, sans-serif; background: var(--bg); margin: 0; padding: 0; }
         .hidden { display: none !important; }
         
-        /* Auth Screen */
+        /* Màn hình Đăng nhập/Đăng ký */
         .auth-container { width: 320px; margin: 80px auto; background: white; padding: 25px; border-radius: 12px; box-shadow: 0 8px 24px rgba(0,0,0,0.15); text-align: center; }
-        input { width: 90%; padding: 12px; margin: 10px 0; border: 1px solid #ddd; border-radius: 8px; font-size: 14px; }
-        button { width: 100%; padding: 12px; background: var(--primary); color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; margin-top: 10px; }
-        button:hover { background: #0073e6; }
+        input { width: 90%; padding: 12px; margin: 10px 0; border: 1px solid #ddd; border-radius: 8px; font-size: 14px; outline: none; }
+        input:focus { border-color: var(--primary); }
+        button { width: 100%; padding: 12px; background: var(--primary); color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; margin-top: 10px; transition: 0.3s; }
+        button:hover { background: #0073e6; opacity: 0.9; }
         .auth-toggle { margin-top: 15px; color: var(--primary); cursor: pointer; font-size: 14px; text-decoration: underline; }
 
-        /* Main Header */
+        /* Thanh tiêu đề (Header) */
         header { background: white; padding: 10px 20px; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; box-shadow: 0 2px 4px rgba(0,0,0,0.1); z-index: 100; }
-        .logo { color: var(--primary); font-weight: bold; font-size: 22px; text-decoration: none; }
+        .logo { color: var(--primary); font-weight: bold; font-size: 24px; text-decoration: none; }
         nav { display: flex; gap: 15px; }
-        nav button { background: #e4e6eb; color: #1c1e21; font-size: 20px; width: 40px; height: 40px; border-radius: 50%; border: none; display: flex; align-items: center; justify-content: center; }
+        nav button { background: #e4e6eb; color: #1c1e21; font-size: 20px; width: 45px; height: 45px; border-radius: 50%; border: none; display: flex; align-items: center; justify-content: center; }
+        nav button:hover { background: #d8dadf; }
 
-        /* Content */
-        .container { max-width: 550px; margin: 20px auto; padding: 0 10px; }
-        .card { background: white; padding: 15px; border-radius: 8px; margin-bottom: 15px; box-shadow: 0 1px 2px rgba(0,0,0,0.1); }
-        .avatar { width: 40px; height: 40px; border-radius: 50%; object-fit: cover; background: #ddd; }
+        /* Bố cục nội dung */
+        .container { max-width: 550px; margin: 20px auto; padding: 0 10px; min-height: 100vh; }
+        .card { background: white; padding: 15px; border-radius: 10px; margin-bottom: 15px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+        .avatar { width: 40px; height: 40px; border-radius: 50%; object-fit: cover; background: #eee; }
         
-        /* Search */
-        .search-box { flex-grow: 1; margin: 0 15px; max-width: 200px; }
-        .search-box input { margin: 0; padding: 8px 12px; border-radius: 20px; background: #f0f2f5; border: none; width: 100%; }
+        /* Tìm kiếm */
+        .search-box { flex-grow: 1; margin: 0 15px; max-width: 250px; }
+        .search-box input { margin: 0; padding: 10px 15px; border-radius: 25px; background: #f0f2f5; border: none; width: 100%; }
 
-        /* Post Styles */
-        .post-header { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
-        .post-author { font-weight: bold; }
+        /* Bài đăng (Post) */
+        .post-header { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; }
+        .post-author { font-weight: bold; font-size: 15px; }
         .post-time { font-size: 12px; color: #65676b; }
-        .post-media { width: 100%; border-radius: 8px; margin-top: 10px; max-height: 400px; object-fit: cover; }
+        .post-content { margin-bottom: 10px; line-height: 1.4; word-wrap: break-word; }
+        .post-media { width: calc(100% + 30px); margin-left: -15px; margin-top: 10px; max-height: 500px; object-fit: cover; display: block; border-top: 1px solid #eee; border-bottom: 1px solid #eee; }
 
-        /* Chat View */
-        .friend-item { display: flex; align-items: center; gap: 10px; padding: 10px; cursor: pointer; border-radius: 8px; }
+        /* Danh sách bạn bè */
+        .friend-item { display: flex; align-items: center; gap: 12px; padding: 12px; cursor: pointer; border-radius: 10px; transition: 0.2s; }
         .friend-item:hover { background: #f2f2f2; }
+        .btn-unfriend { width: auto; background: #ffebee; color: #d32f2f; font-size: 12px; padding: 5px 12px; margin-top: 0; }
     </style>
 </head>
 <body>
 
 <div id="auth-screen" class="auth-container">
-    <h2 style="color: var(--primary); font-size: 32px; margin-bottom: 20px;">ChatMiFan</h2>
+    <h1 style="color: var(--primary); font-size: 36px; margin-bottom: 10px;">ChatMiFan</h1>
+    <p style="color: #65676b; margin-bottom: 30px;">Kết nối mọi lúc, mọi nơi</p>
     
     <div id="login-form">
         <h3>Đăng nhập</h3>
         <input type="text" id="login-user" placeholder="Tên tài khoản">
         <input type="password" id="login-pass" placeholder="Mật khẩu">
         <button onclick="handleLogin()">Đăng nhập</button>
-        <div class="auth-toggle" onclick="toggleAuth(false)">Chưa có tài khoản? Đăng ký ngay</div>
+        <div class="auth-toggle" onclick="toggleAuth(false)">Bạn mới sử dụng ChatMiFan? Tạo tài khoản</div>
     </div>
 
     <div id="reg-form" class="hidden">
         <h3>Tạo tài khoản mới</h3>
-        <input type="text" id="reg-user" placeholder="Tên tài khoản muốn tạo">
-        <input type="password" id="reg-pass" placeholder="Mật khẩu (ít nhất 6 ký tự)">
+        <input type="text" id="reg-user" placeholder="Tên tài khoản muốn đặt">
+        <input type="password" id="reg-pass" placeholder="Mật khẩu (tối thiểu 6 ký tự)">
         <button onclick="handleRegister()">Đăng ký</button>
-        <div class="auth-toggle" onclick="toggleAuth(true)">Đã có tài khoản? Đăng nhập</div>
+        <div class="auth-toggle" onclick="toggleAuth(true)">Đã có tài khoản? Quay lại đăng nhập</div>
     </div>
 </div>
 
@@ -68,7 +73,7 @@
     <header>
         <div class="logo">ChatMiFan</div>
         <div class="search-box">
-            <input type="text" id="search-input" placeholder="Tìm tên người dùng..." onkeyup="if(event.key==='Enter') searchUser()">
+            <input type="text" id="search-input" placeholder="Tìm bạn bè..." onkeyup="if(event.key==='Enter') searchUser()">
         </div>
         <nav>
             <button onclick="showPage('home')" title="Trang chủ">🏠</button>
@@ -80,12 +85,15 @@
     <div id="page-home" class="container">
         <div class="card">
             <div style="display: flex; gap: 10px;">
-                <img id="post-avatar-preview" class="avatar">
-                <input type="text" id="post-text" placeholder="Bạn đang nghĩ gì?" style="background: #f0f2f5; border: none;">
+                <img id="post-avatar-preview" class="avatar" src="">
+                <input type="text" id="post-text" placeholder="Bạn đang nghĩ gì thế?" style="background: #f0f2f5; border: none; flex-grow: 1;">
             </div>
-            <div style="margin-top: 10px; display: flex; justify-content: space-between; align-items: center;">
-                <input type="file" id="post-file" accept="image/*,video/*" style="width: auto; font-size: 12px;">
-                <button onclick="createPost()" style="width: 80px; margin: 0;">Đăng</button>
+            <div style="margin-top: 15px; display: flex; justify-content: space-between; align-items: center; border-top: 1px solid #eee; padding-top: 10px;">
+                <label style="cursor: pointer; color: #45bd62; font-size: 14px; font-weight: bold;">
+                    📷 Ảnh/Video
+                    <input type="file" id="post-file" accept="image/*,video/*" style="display: none;">
+                </label>
+                <button onclick="createPost()" style="width: 100px; margin: 0; padding: 8px;">Đăng</button>
             </div>
         </div>
         <div id="newsfeed"></div>
@@ -93,34 +101,45 @@
 
     <div id="page-messenger" class="container hidden">
         <div class="card">
-            <h3>Bạn bè</h3>
+            <h3>Danh sách bạn bè</h3>
             <div id="friend-list"></div>
         </div>
     </div>
 
     <div id="page-profile" class="container hidden">
-        <div class="card" style="text-align: center;">
+        <div class="card" style="text-align: center; padding: 40px 20px;">
             <div style="position: relative; display: inline-block;">
-                <img id="my-avatar" class="avatar" style="width:120px; height:120px; border: 3px solid white; box-shadow: 0 2px 10px rgba(0,0,0,0.1);">
-                <button onclick="document.getElementById('upload-avatar').click()" style="position: absolute; bottom: 5px; right: 5px; width: 35px; height: 35px; border-radius: 50%; padding: 0;">📷</button>
+                <img id="my-avatar" class="avatar" style="width:130px; height:130px; border: 4px solid white; box-shadow: 0 4px 12px rgba(0,0,0,0.15);">
+                <button onclick="document.getElementById('upload-avatar').click()" style="position: absolute; bottom: 8px; right: 8px; width: 35px; height: 35px; border-radius: 50%; padding: 0; background: #e4e6eb; color: black;">📷</button>
             </div>
             <input type="file" id="upload-avatar" class="hidden" onchange="changeAvatar(this)">
-            <h2 id="profile-name" style="margin: 10px 0;"></h2>
-            <button onclick="editName()" style="width: auto; background: #e4e6eb; color: black; padding: 5px 15px;">Đổi tên</button>
-            <button onclick="logout()" style="width: auto; background: #ff4444; padding: 5px 15px; margin-left: 10px;">Đăng xuất</button>
+            <h2 id="profile-name" style="margin: 15px 0 5px 0;"></h2>
+            <div style="display: flex; justify-content: center; gap: 10px; margin-top: 20px;">
+                <button onclick="editName()" style="width: auto; background: #e4e6eb; color: black; padding: 8px 20px;">Sửa tên</button>
+                <button onclick="logout()" style="width: auto; background: #f44336; padding: 8px 20px;">Đăng xuất</button>
+            </div>
         </div>
-        <h3 style="padding: 0 15px;">Bài viết của bạn</h3>
+        <h3 style="padding-left: 10px; margin-bottom: 10px;">Bài viết của bạn</h3>
         <div id="my-posts"></div>
     </div>
 </div>
 
 <script>
-    // DỮ LIỆU GIẢ LẬP
+    // --- KHỞI TẠO DỮ LIỆU ---
     let users = JSON.parse(localStorage.getItem('cmf_users')) || {};
     let posts = JSON.parse(localStorage.getItem('cmf_posts')) || [];
     let currentUser = null;
 
-    // --- LOGIC TÀI KHOẢN ---
+    // --- TỰ ĐỘNG ĐĂNG NHẬP ---
+    window.onload = function() {
+        let savedUser = localStorage.getItem('cmf_logged_in_user');
+        if (savedUser && users[savedUser]) {
+            currentUser = users[savedUser];
+            startApp();
+        }
+    };
+
+    // --- HỆ THỐNG ĐĂNG NHẬP / ĐĂNG KÝ ---
     function toggleAuth(isLogin) {
         document.getElementById('login-form').classList.toggle('hidden', !isLogin);
         document.getElementById('reg-form').classList.toggle('hidden', isLogin);
@@ -131,24 +150,24 @@
         let pass = document.getElementById('reg-pass').value.trim();
 
         if (name.length < 3 || pass.length < 6) {
-            alert("Tên phải từ 3 ký tự và Mật khẩu từ 6 ký tự!");
+            alert("Tên tài khoản tối thiểu 3 ký tự, mật khẩu tối thiểu 6 ký tự!");
             return;
         }
         if (users[name]) {
-            alert("Tên tài khoản này đã có người sử dụng!");
+            alert("Tên tài khoản này đã tồn tại!");
             return;
         }
 
         users[name] = {
             username: name,
-            password: pass, // Lưu mật khẩu
+            password: pass,
             name: name,
-            avatar: '',
+            avatar: 'https://www.w3schools.com/howto/img_avatar.png',
             friends: [],
             requests: []
         };
         saveData();
-        alert("Đăng ký thành công! Vui lòng đăng nhập.");
+        alert("Đăng ký thành công! Hãy đăng nhập.");
         toggleAuth(true);
     }
 
@@ -158,9 +177,10 @@
 
         if (users[name] && users[name].password === pass) {
             currentUser = users[name];
+            localStorage.setItem('cmf_logged_in_user', name);
             startApp();
         } else {
-            alert("Sai tên đăng nhập hoặc mật khẩu! Vui lòng thử lại.");
+            alert("Sai tài khoản hoặc mật khẩu!");
         }
     }
 
@@ -173,42 +193,39 @@
     }
 
     function logout() {
-        location.reload();
+        if(confirm("Bạn có chắc chắn muốn đăng xuất?")) {
+            localStorage.removeItem('cmf_logged_in_user');
+            location.reload();
+        }
     }
 
-    // --- CHỨC NĂNG CHÍNH ---
-    function updateUI() {
-        document.getElementById('profile-name').innerText = currentUser.name;
-        let avt = currentUser.avatar || 'https://www.w3schools.com/howto/img_avatar.png';
-        document.getElementById('my-avatar').src = avt;
-        document.getElementById('post-avatar-preview').src = avt;
-        renderPosts();
-    }
-
+    // --- ĐIỀU HƯỚNG ---
     function showPage(pageId) {
         document.querySelectorAll('.container').forEach(p => p.classList.add('hidden'));
         document.getElementById('page-' + pageId).classList.remove('hidden');
         if(pageId === 'messenger') renderFriendList();
+        window.scrollTo(0, 0);
     }
 
+    // --- CHỨC NĂNG BẠN BÈ ---
     function searchUser() {
         let q = document.getElementById('search-input').value.trim();
         if(!q || q === currentUser.username) return;
 
         if(users[q]) {
             if(currentUser.friends.includes(q)) {
-                alert("Người này đã là bạn bè!");
-            } else if(confirm(`Tìm thấy người dùng "${q}". Gửi yêu cầu kết bạn?`)) {
+                alert("Người này đã là bạn bè của bạn.");
+            } else if(confirm(`Tìm thấy người dùng "${q}". Bạn có muốn kết bạn?`)) {
                 if(!users[q].requests.includes(currentUser.username)) {
                     users[q].requests.push(currentUser.username);
                     saveData();
-                    alert("Đã gửi yêu cầu kết bạn!");
+                    alert("Đã gửi lời mời kết bạn!");
                 } else {
-                    alert("Bạn đã gửi yêu cầu trước đó rồi.");
+                    alert("Bạn đã gửi lời mời trước đó.");
                 }
             }
         } else {
-            alert("Không tìm thấy người dùng này!");
+            alert("Không tìm thấy người dùng này trên hệ thống.");
         }
         document.getElementById('search-input').value = "";
     }
@@ -217,7 +234,7 @@
         if(currentUser.requests && currentUser.requests.length > 0) {
             let reqs = [...currentUser.requests];
             reqs.forEach((sender, index) => {
-                if(confirm(`Người dùng "${sender}" muốn kết bạn với bạn. Đồng ý chứ?`)) {
+                if(confirm(`Yêu cầu kết bạn: Chấp nhận lời mời từ "${sender}"?`)) {
                     currentUser.friends.push(sender);
                     users[sender].friends.push(currentUser.username);
                 }
@@ -227,6 +244,7 @@
         }
     }
 
+    // --- CHỨC NĂNG ĐĂNG BÀI ---
     function createPost() {
         let text = document.getElementById('post-text').value.trim();
         let fileInput = document.getElementById('post-file');
@@ -238,7 +256,7 @@
             author: currentUser.username,
             authorName: currentUser.name,
             content: text,
-            time: new Date().toLocaleString('vi-VN'),
+            time: new Date().toLocaleString('vi-VN', {hour: '2-digit', minute:'2-digit', day:'2-digit', month:'2-digit'}),
             media: ''
         };
 
@@ -277,24 +295,32 @@
                             <div class="post-time">${p.time}</div>
                         </div>
                     </div>
-                    <div>${p.content}</div>
+                    <div class="post-content">${p.content}</div>
                     ${p.media ? (isVideo ? `<video controls class="post-media" src="${p.media}"></video>` : `<img class="post-media" src="${p.media}">`) : ''}
-                    ${p.author === currentUser.username ? `<button onclick="deletePost(${p.id})" style="background:none; color:red; width:auto; font-size:12px; border:none; padding:5px 0;">Gỡ bài xuống</button>` : ''}
+                    ${p.author === currentUser.username ? `<button onclick="deletePost(${p.id})" style="background:none; color:#f44336; width:auto; font-size:12px; border:none; padding:10px 0; cursor:pointer;">Gỡ bài</button>` : ''}
                 </div>
             `;
             feedHtml += postHtml;
             if(p.author === currentUser.username) myHtml += postHtml;
         });
-        document.getElementById('newsfeed').innerHTML = feedHtml || '<p style="text-align:center">Chưa có bài đăng nào.</p>';
+        document.getElementById('newsfeed').innerHTML = feedHtml || '<p style="text-align:center; color:#65676b;">Chưa có bài đăng nào.</p>';
         document.getElementById('my-posts').innerHTML = myHtml;
     }
 
     function deletePost(id) {
-        if(confirm("Bạn muốn xóa bài viết này?")) {
+        if(confirm("Bạn có muốn xóa bài viết này không?")) {
             posts = posts.filter(p => p.id !== id);
             saveData();
             renderPosts();
         }
+    }
+
+    // --- TRANG CÁ NHÂN & TIN NHẮN ---
+    function updateUI() {
+        document.getElementById('profile-name').innerText = currentUser.name;
+        document.getElementById('my-avatar').src = currentUser.avatar;
+        document.getElementById('post-avatar-preview').src = currentUser.avatar;
+        renderPosts();
     }
 
     function renderFriendList() {
@@ -302,17 +328,17 @@
         currentUser.friends.forEach(f => {
             html += `
                 <div class="friend-item">
-                    <img src="${users[f].avatar || 'https://www.w3schools.com/howto/img_avatar.png'}" class="avatar">
-                    <div style="flex-grow:1" onclick="alert('Tính năng chat đang được bảo trì!')">${users[f].name}</div>
-                    <button onclick="unfriend('${f}')" style="width:auto; background:#ff4444; font-size:12px;">Hủy kết bạn</button>
+                    <img src="${users[f].avatar}" class="avatar">
+                    <div style="flex-grow:1" onclick="alert('Tính năng chat đang được phát triển!')"><strong>${users[f].name}</strong></div>
+                    <button onclick="unfriend('${f}')" class="btn-unfriend">Hủy kết bạn</button>
                 </div>
             `;
         });
-        document.getElementById('friend-list').innerHTML = html || 'Bạn chưa có người bạn nào.';
+        document.getElementById('friend-list').innerHTML = html || '<p style="text-align:center; color:#65676b;">Bạn chưa có người bạn nào.</p>';
     }
 
     function unfriend(fName) {
-        if(confirm(`Xóa kết bạn với ${fName}?`)) {
+        if(confirm(`Bạn có chắc muốn hủy kết bạn với ${fName}?`)) {
             currentUser.friends = currentUser.friends.filter(x => x !== fName);
             users[fName].friends = users[fName].friends.filter(x => x !== currentUser.username);
             saveData();
@@ -333,9 +359,9 @@
     }
 
     function editName() {
-        let n = prompt("Nhập tên hiển thị mới:", currentUser.name);
-        if(n) {
-            currentUser.name = n;
+        let n = prompt("Nhập tên mới bạn muốn hiển thị:", currentUser.name);
+        if(n && n.trim() !== "") {
+            currentUser.name = n.trim();
             saveData();
             updateUI();
         }
@@ -348,5 +374,5 @@
 </script>
 
 </body>
-</html>
-# ChatMiFan
+                    </html>
+                    # ChatMiFan
