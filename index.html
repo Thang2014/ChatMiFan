@@ -7,55 +7,52 @@
     <style>
         :root { --primary: #0084ff; --bg: #f0f2f5; }
         body { font-family: Arial, sans-serif; background: var(--bg); margin: 0; padding: 0; overflow-x: hidden; }
+        
+        /* QUAN TRỌNG: Lớp ẩn phần tử */
         .hidden { display: none !important; }
         
         /* Auth Screen */
-        .auth-container { width: 320px; margin: 80px auto; background: white; padding: 25px; border-radius: 12px; box-shadow: 0 8px 24px rgba(0,0,0,0.15); text-align: center; }
+        #auth-screen { width: 100%; min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; background: white; position: fixed; top: 0; left: 0; z-index: 1000; }
+        .auth-box { width: 320px; padding: 25px; border-radius: 12px; box-shadow: 0 8px 24px rgba(0,0,0,0.1); text-align: center; }
+        
         input { width: 90%; padding: 12px; margin: 10px 0; border: 1px solid #ddd; border-radius: 8px; font-size: 14px; outline: none; }
         button { width: 100%; padding: 12px; background: var(--primary); color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; margin-top: 10px; }
 
         /* Header */
         header { background: white; padding: 10px 15px; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; box-shadow: 0 2px 4px rgba(0,0,0,0.1); z-index: 100; }
         .header-left { display: flex; gap: 10px; align-items: center; }
-        .header-icon { background: #e4e6eb; width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 20px; border: none; position: relative; }
+        .header-icon { background: #e4e6eb; width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 18px; border: none; position: relative; }
         .badge { position: absolute; top: -2px; right: -2px; background: red; color: white; font-size: 10px; padding: 2px 5px; border-radius: 10px; }
-        .logo { color: var(--primary); font-weight: bold; font-size: 22px; position: absolute; left: 50%; transform: translateX(-50%); }
-        nav { display: flex; gap: 10px; }
-        nav button { background: none; border: none; font-size: 24px; cursor: pointer; padding: 5px; }
+        .logo { color: var(--primary); font-weight: bold; font-size: 22px; }
+        nav { display: flex; gap: 12px; }
+        nav button { background: none; border: none; font-size: 22px; cursor: pointer; }
 
         /* Container */
         .container { max-width: 550px; margin: 15px auto; padding: 0 10px; min-height: 90vh; }
         .card { background: white; padding: 15px; border-radius: 10px; margin-bottom: 15px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
         .avatar { width: 45px; height: 45px; border-radius: 50%; object-fit: cover; background: #eee; }
         
-        /* Search & List */
-        .search-bar-container { display: flex; gap: 10px; margin-bottom: 20px; }
-        .search-bar-container input { margin: 0; flex-grow: 1; border-radius: 20px; background: #e4e6eb; border: none; }
-        .user-item { display: flex; align-items: center; gap: 12px; padding: 12px; background: white; border-radius: 10px; margin-bottom: 8px; }
-        .user-info { flex-grow: 1; }
-        .btn-action { width: auto; padding: 6px 12px; font-size: 13px; margin: 0; }
-
-        /* Post */
-        .post-header { display: flex; justify-content: space-between; align-items: flex-start; }
         .post-media { width: calc(100% + 30px); margin-left: -15px; max-height: 450px; object-fit: cover; margin-top: 10px; }
-        .btn-delete { color: #ff4444; background: none; border: none; font-size: 12px; cursor: pointer; padding: 5px; font-weight: bold; }
+        .btn-delete { color: #ff4444; background: none; border: none; font-size: 12px; cursor: pointer; font-weight: bold; }
     </style>
 </head>
 <body>
 
-<div id="auth-screen" class="auth-container">
-    <h1 style="color: var(--primary);">ChatMiFan</h1>
-    <div id="login-form">
-        <input type="text" id="login-user" placeholder="Tên tài khoản">
-        <input type="password" id="login-pass" placeholder="Mật khẩu">
-        <button onclick="handleLogin()">Đăng nhập</button>
-        <p class="auth-toggle" onclick="toggleAuth(false)" style="cursor:pointer; color:var(--primary)">Đăng ký tài khoản</p>
-    </div>
-    <div id="reg-form" class="hidden">
-        <input type="text" id="reg-user" placeholder="Tên muốn tạo">
-        <input type="password" id="reg-pass" placeholder="Mật khẩu (6 ký tự)">
-        <button onclick="handleRegister()">Đăng ký</button>
-        <p class="auth-toggle" onclick="toggleAuth(true)" style="cursor:pointer; color:var(--primary)">Quay lại đăng nhập</p>
+<div id="auth-screen">
+    <div class="auth-box">
+        <h1 style="color: var(--primary); margin-bottom: 20px;">ChatMiFan</h1>
+        <div id="login-form">
+            <input type="text" id="login-user" placeholder="Tên tài khoản">
+            <input type="password" id="login-pass" placeholder="Mật khẩu">
+            <button onclick="handleLogin()">Đăng nhập</button>
+            <p onclick="toggleAuth(false)" style="cursor:pointer; color:var(--primary); font-size: 14px; margin-top: 15px;">Đăng ký tài khoản</p>
+        </div>
+        <div id="reg-form" class="hidden">
+            <input type="text" id="reg-user" placeholder="Tên muốn tạo">
+            <input type="password" id="reg-pass" placeholder="Mật khẩu (6 ký tự)">
+            <button onclick="handleRegister()">Đăng ký</button>
+            <p onclick="toggleAuth(true)" style="cursor:pointer; color:var(--primary); font-size: 14px; margin-top: 15px;">Quay lại đăng nhập</p>
+        </div>
     </div>
 </div>
 
@@ -72,34 +69,40 @@
         </nav>
     </header>
 
-    <div id="page-home" class="container">
+    <div id="page-home" class="page container">
         <div class="card">
             <div style="display: flex; gap: 10px;">
                 <img id="post-avt" class="avatar">
                 <input type="text" id="post-text" placeholder="Bạn đang nghĩ gì?" style="border:none; background:#f0f2f5; flex-grow:1; border-radius:20px; padding:0 15px;">
             </div>
-            <input type="file" id="post-file" accept="image/*,video/*" style="margin-top:10px; font-size:12px;">
+            <input type="file" id="post-file" accept="image/*,video/*" style="margin-top:10px; font-size:12px; width: 100%;">
             <button onclick="createPost()">Đăng bài</button>
         </div>
         <div id="newsfeed"></div>
     </div>
 
-    <div id="page-search" class="container hidden">
-        <div class="search-bar-container"><input type="text" id="search-input" placeholder="Tìm tên người dùng..." onkeyup="doSearch()"></div>
+    <div id="page-search" class="page container hidden">
+        <div class="card">
+            <input type="text" id="search-input" placeholder="Tìm tên người dùng..." onkeyup="doSearch()" style="width: 93%;">
+        </div>
         <div id="search-results"></div>
     </div>
 
-    <div id="page-notif" class="container hidden"><h3>Lời mời kết bạn</h3><div id="request-list"></div></div>
+    <div id="page-notif" class="page container hidden">
+        <div class="card"><h3>Lời mời kết bạn</h3><div id="request-list"></div></div>
+    </div>
 
-    <div id="page-profile" class="container hidden">
+    <div id="page-profile" class="page container hidden">
         <div class="card" style="text-align: center;">
             <img id="my-avatar" class="avatar" style="width:100px; height:100px;">
             <h2 id="profile-name"></h2>
             <p id="next-rename-info" style="font-size:12px; color:#65676b;"></p>
-            <button onclick="editName()" style="width:auto; padding:8px 15px; background:#e4e6eb; color:black;">Đổi tên</button>
-            <button onclick="logout()" style="background:#ff4444; width:auto; padding:8px 15px; margin-left:10px;">Đăng xuất</button>
+            <div style="display: flex; justify-content: center; gap: 10px;">
+                <button onclick="editName()" style="width:auto; padding:8px 15px; background:#e4e6eb; color:black;">Đổi tên</button>
+                <button onclick="logout()" style="background:#ff4444; width:auto; padding:8px 15px;">Đăng xuất</button>
+            </div>
         </div>
-        <h3 style="padding: 0 10px;">Bài đăng của bạn</h3>
+        <h3 style="padding-left: 10px;">Bài đăng của bạn</h3>
         <div id="my-posts-list"></div>
     </div>
 </div>
@@ -111,24 +114,30 @@
 
     window.onload = () => {
         let saved = localStorage.getItem('cmf_logged_in_user');
-        if(saved && users[saved]) { currentUser = users[saved]; startApp(); }
+        if(saved && users[saved]) { 
+            currentUser = users[saved]; 
+            startApp(); 
+        }
     };
 
-    function saveData() { localStorage.setItem('cmf_users', JSON.stringify(users)); localStorage.setItem('cmf_posts', JSON.stringify(posts)); }
-    function logout() { localStorage.removeItem('cmf_logged_in_user'); location.reload(); }
-
-    function toggleAuth(isLogin) {
-        document.getElementById('login-form').classList.toggle('hidden', !isLogin);
-        document.getElementById('reg-form').classList.toggle('hidden', isLogin);
+    function startApp() {
+        // Ẩn hoàn toàn màn hình đăng nhập
+        document.getElementById('auth-screen').classList.add('hidden');
+        // Hiện giao diện chính
+        document.getElementById('main-app').classList.remove('hidden');
+        updateUI();
+        showPage('home');
     }
 
-    function handleRegister() {
-        let u = document.getElementById('reg-user').value.trim();
-        let p = document.getElementById('reg-pass').value.trim();
-        if(u.length < 3 || p.length < 6) return alert("Tên > 3 ký tự, Pass > 6 ký tự!");
-        if(users[u]) return alert("Tài khoản đã có người dùng!");
-        users[u] = { username: u, password: p, name: u, avatar: 'https://www.w3schools.com/howto/img_avatar.png', friends: [], requests: [], lastRename: 0 };
-        saveData(); alert("Đăng ký thành công!"); toggleAuth(true);
+    function showPage(p) {
+        // Ẩn tất cả các trang nội dung
+        document.querySelectorAll('.page').forEach(page => page.classList.add('hidden'));
+        // Chỉ hiện trang được chọn
+        document.getElementById('page-' + p).classList.remove('hidden');
+        
+        if(p === 'notif') renderRequests();
+        if(p === 'profile') renderMyPosts();
+        window.scrollTo(0,0);
     }
 
     function handleLogin() {
@@ -141,424 +150,54 @@
         } else alert("Sai tài khoản hoặc mật khẩu!");
     }
 
-    function startApp() {
-        document.getElementById('auth-screen').classList.add('hidden');
-        document.getElementById('main-app').classList.remove('hidden');
-        updateUI();
-        showPage('home');
+    function handleRegister() {
+        let u = document.getElementById('reg-user').value.trim();
+        let p = document.getElementById('reg-pass').value.trim();
+        if(u.length < 3 || p.length < 6) return alert("Yêu cầu: Tên > 3 và Pass > 6 ký tự!");
+        if(users[u]) return alert("Tài khoản đã tồn tại!");
+        users[u] = { username: u, password: p, name: u, avatar: 'https://www.w3schools.com/howto/img_avatar.png', friends: [], requests: [], lastRename: 0 };
+        saveData(); alert("Đăng ký thành công!"); toggleAuth(true);
     }
-
-    function showPage(p) {
-        document.querySelectorAll('.container').forEach(c => c.classList.add('hidden'));
-        document.getElementById('page-' + p).classList.remove('hidden');
-        if(p === 'notif') renderRequests();
-        if(p === 'profile') renderMyPosts();
-    }
-
-    function updateUI() {
-        document.getElementById('profile-name').innerText = currentUser.name;
-        document.getElementById('my-avatar').src = currentUser.avatar;
-        document.getElementById('post-avt').src = currentUser.avatar;
-        
-        let badge = document.getElementById('notif-badge');
-        badge.innerText = currentUser.requests.length;
-        badge.classList.toggle('hidden', currentUser.requests.length === 0);
-
-        // Hiển thị thông tin ngày đổi tên
-        if(currentUser.lastRename) {
-            let nextDate = new Date(currentUser.lastRename + (14 * 24 * 60 * 60 * 1000));
-            document.getElementById('next-rename-info').innerText = "Ngày có thể đổi tên tiếp theo: " + nextDate.toLocaleDateString();
-        }
-        renderPosts();
-    }
-
-    function editName() {
-        let now = Date.now();
-        let twoWeeks = 14 * 24 * 60 * 60 * 1000;
-        
-        if (currentUser.lastRename && (now - currentUser.lastRename < twoWeeks)) {
-            let waitDays = Math.ceil((twoWeeks - (now - currentUser.lastRename)) / (24 * 60 * 60 * 1000));
-            alert("Bạn cần đợi thêm " + waitDays + " ngày nữa mới có thể đổi tên!");
-            return;
-        }
-
-        let newName = prompt("Nhập tên hiển thị mới:", currentUser.name);
-        if (newName && newName.trim() !== "") {
-            currentUser.name = newName.trim();
-            currentUser.lastRename = now;
-            saveData();
-            updateUI();
-            alert("Đổi tên thành công!");
-        }
-    }
-
-    // TÌM KIẾM
-    function doSearch() {
-        let q = document.getElementById('search-input').value.toLowerCase().trim();
-        let resDiv = document.getElementById('search-results');
-        resDiv.innerHTML = "";
-        if(!q) return;
-        Object.keys(users).forEach(u => {
-            if(u !== currentUser.username && u.toLowerCase().includes(q)) {
-                let isF = currentUser.friends.includes(u);
-                let isS = users[u].requests.includes(currentUser.username);
-                resDiv.innerHTML += `
-                    <div class="user-item card">
-                        <img src="${users[u].avatar}" class="avatar">
-                        <div class="user-info"><b>${users[u].name}</b></div>
-                        ${isF ? '<span>Bạn bè</span>' : `<button class="btn-action" style="background:var(--primary); color:white; border:none; border-radius:5px;" onclick="sendReq('${u}')" ${isS?'disabled':''}>${isS?'Đã gửi':'Kết bạn'}</button>`}
-                    </div>`;
-            }
-        });
-    }
-
-    function sendReq(target) {
-        if(!users[target].requests.includes(currentUser.username)) {
-            users[target].requests.push(currentUser.username);
-            saveData(); doSearch(); alert("Đã gửi lời mời!");
-        }
-    }
-
-    function renderRequests() {
-        let list = document.getElementById('request-list');
-        list.innerHTML = currentUser.requests.length ? "" : "Không có lời mời nào.";
-        currentUser.requests.forEach(u => {
-            list.innerHTML += `
-                <div class="user-item card">
-                    <img src="${users[u].avatar}" class="avatar">
-                    <div class="user-info"><b>${users[u].name}</b></div>
-                    <button class="btn-action" style="background:var(--primary); color:white; border:none; margin-right:5px; border-radius:5px;" onclick="acceptReq('${u}')">Đồng ý</button>
-                    <button class="btn-action" style="background:#ddd; border:none; border-radius:5px;" onclick="rejectReq('${u}')">Xóa</button>
-                </div>`;
-        });
-    }
-
-    function acceptReq(u) {
-        currentUser.friends.push(u); users[u].friends.push(currentUser.username);
-        currentUser.requests = currentUser.requests.filter(x => x !== u);
-        saveData(); updateUI(); renderRequests();
-    }
-    function rejectReq(u) { currentUser.requests = currentUser.requests.filter(x => x !== u); saveData(); renderRequests(); }
-
-    // BÀI ĐĂNG
-    function createPost() {
-        let txt = document.getElementById('post-text').value;
-        let file = document.getElementById('post-file').files[0];
-        if(!txt && !file) return;
-        let p = { id: Date.now(), author: currentUser.username, authorName: currentUser.name, content: txt, media: '', time: new Date().toLocaleString() };
-        if(file) {
-            let r = new FileReader();
-            r.onload = (e) => { p.media = e.target.result; posts.unshift(p); finishP(); };
-            r.readAsDataURL(file);
-        } else { posts.unshift(p); finishP(); }
-    }
-
-    function finishP() { saveData(); renderPosts(); document.getElementById('post-text').value = ""; document.getElementById('post-file').value = ""; }
-
-    function deletePost(id) {
-        if(confirm("Bạn có chắc chắn muốn gỡ bài viết này?")) {
-            posts = posts.filter(p => p.id !== id);
-            saveData();
-            renderPosts();
-            renderMyPosts();
-        }
-    }
-
-    function renderPosts() {
-        let feed = document.getElementById('newsfeed');
-        feed.innerHTML = "";
-        posts.forEach(p => {
-            let isV = p.media.includes('video');
-            feed.innerHTML += `
-                <div class="card">
-                    <div class="post-header">
-                        <div style="display:flex; gap:10px;">
-                            <img src="${users[p.author]?.avatar}" class="avatar">
-                            <div><b>${p.authorName}</b><br><small>${p.time}</small></div>
-                        </div>
-                        ${p.author === currentUser.username ? `<button class="btn-delete" onclick="deletePost(${p.id})">Gỡ bài</button>` : ''}
-                    </div>
-                    <div style="margin-top:10px;">${p.content}</div>
-                    ${p.media ? (isV ? `<video src="${p.media}" controls class="post-media"></video>` : `<img src="${p.media}" class="post-media">`) : ''}
-                </div>`;
-        });
-    }
-
-    function renderMyPosts() {
-        let list = document.getElementById('my-posts-list');
-        list.innerHTML = "";
-        let myPosts = posts.filter(p => p.author === currentUser.username);
-        myPosts.forEach(p => {
-            list.innerHTML += `<div class="card"><b>${p.time}</b><br>${p.content.substring(0, 50)}... <button class="btn-delete" onclick="deletePost(${p.id})">Gỡ bài</button></div>`;
-        });
-    }
-</script>
-
-</body>
-    </html>
-    <!DOCTYPE html>
-<html lang="vi">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ChatMiFan</title>
-    <style>
-        :root { --primary: #0084ff; --bg: #f0f2f5; }
-        body { font-family: Arial, sans-serif; background: var(--bg); margin: 0; padding: 0; overflow-x: hidden; }
-        .hidden { display: none !important; }
-        
-        /* Auth Screen */
-        .auth-container { width: 320px; margin: 80px auto; background: white; padding: 25px; border-radius: 12px; box-shadow: 0 8px 24px rgba(0,0,0,0.15); text-align: center; }
-        input { width: 90%; padding: 12px; margin: 10px 0; border: 1px solid #ddd; border-radius: 8px; font-size: 14px; outline: none; }
-        button { width: 100%; padding: 12px; background: var(--primary); color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; margin-top: 10px; }
-
-        /* Header */
-        header { background: white; padding: 10px 15px; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; box-shadow: 0 2px 4px rgba(0,0,0,0.1); z-index: 100; }
-        .header-left { display: flex; gap: 10px; align-items: center; }
-        .header-icon { background: #e4e6eb; width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 20px; border: none; position: relative; }
-        .badge { position: absolute; top: -2px; right: -2px; background: red; color: white; font-size: 10px; padding: 2px 5px; border-radius: 10px; }
-        .logo { color: var(--primary); font-weight: bold; font-size: 22px; position: absolute; left: 50%; transform: translateX(-50%); }
-        nav { display: flex; gap: 10px; }
-        nav button { background: none; border: none; font-size: 24px; cursor: pointer; padding: 5px; }
-
-        /* Container */
-        .container { max-width: 550px; margin: 15px auto; padding: 0 10px; min-height: 90vh; }
-        .card { background: white; padding: 15px; border-radius: 10px; margin-bottom: 15px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
-        .avatar { width: 45px; height: 45px; border-radius: 50%; object-fit: cover; background: #eee; }
-        
-        /* Search & List */
-        .search-bar-container { display: flex; gap: 10px; margin-bottom: 20px; }
-        .search-bar-container input { margin: 0; flex-grow: 1; border-radius: 20px; background: #e4e6eb; border: none; }
-        .user-item { display: flex; align-items: center; gap: 12px; padding: 12px; background: white; border-radius: 10px; margin-bottom: 8px; }
-        .user-info { flex-grow: 1; }
-        .btn-action { width: auto; padding: 6px 12px; font-size: 13px; margin: 0; }
-
-        /* Post */
-        .post-header { display: flex; justify-content: space-between; align-items: flex-start; }
-        .post-media { width: calc(100% + 30px); margin-left: -15px; max-height: 450px; object-fit: cover; margin-top: 10px; }
-        .btn-delete { color: #ff4444; background: none; border: none; font-size: 12px; cursor: pointer; padding: 5px; font-weight: bold; }
-    </style>
-</head>
-<body>
-
-<div id="auth-screen" class="auth-container">
-    <h1 style="color: var(--primary);">ChatMiFan</h1>
-    <div id="login-form">
-        <input type="text" id="login-user" placeholder="Tên tài khoản">
-        <input type="password" id="login-pass" placeholder="Mật khẩu">
-        <button onclick="handleLogin()">Đăng nhập</button>
-        <p class="auth-toggle" onclick="toggleAuth(false)" style="cursor:pointer; color:var(--primary)">Đăng ký tài khoản</p>
-    </div>
-    <div id="reg-form" class="hidden">
-        <input type="text" id="reg-user" placeholder="Tên muốn tạo">
-        <input type="password" id="reg-pass" placeholder="Mật khẩu (6 ký tự)">
-        <button onclick="handleRegister()">Đăng ký</button>
-        <p class="auth-toggle" onclick="toggleAuth(true)" style="cursor:pointer; color:var(--primary)">Quay lại đăng nhập</p>
-    </div>
-</div>
-
-<div id="main-app" class="hidden">
-    <header>
-        <div class="header-left">
-            <button class="header-icon" onclick="showPage('notif')">🔔<span id="notif-badge" class="badge hidden">0</span></button>
-            <button class="header-icon" onclick="showPage('search')">🔍</button>
-        </div>
-        <div class="logo">ChatMiFan</div>
-        <nav>
-            <button onclick="showPage('home')">🏠</button>
-            <button onclick="showPage('profile')">👤</button>
-        </nav>
-    </header>
-
-    <div id="page-home" class="container">
-        <div class="card">
-            <div style="display: flex; gap: 10px;">
-                <img id="post-avt" class="avatar">
-                <input type="text" id="post-text" placeholder="Bạn đang nghĩ gì?" style="border:none; background:#f0f2f5; flex-grow:1; border-radius:20px; padding:0 15px;">
-            </div>
-            <input type="file" id="post-file" accept="image/*,video/*" style="margin-top:10px; font-size:12px;">
-            <button onclick="createPost()">Đăng bài</button>
-        </div>
-        <div id="newsfeed"></div>
-    </div>
-
-    <div id="page-search" class="container hidden">
-        <div class="search-bar-container"><input type="text" id="search-input" placeholder="Tìm tên người dùng..." onkeyup="doSearch()"></div>
-        <div id="search-results"></div>
-    </div>
-
-    <div id="page-notif" class="container hidden"><h3>Lời mời kết bạn</h3><div id="request-list"></div></div>
-
-    <div id="page-profile" class="container hidden">
-        <div class="card" style="text-align: center;">
-            <img id="my-avatar" class="avatar" style="width:100px; height:100px;">
-            <h2 id="profile-name"></h2>
-            <p id="next-rename-info" style="font-size:12px; color:#65676b;"></p>
-            <button onclick="editName()" style="width:auto; padding:8px 15px; background:#e4e6eb; color:black;">Đổi tên</button>
-            <button onclick="logout()" style="background:#ff4444; width:auto; padding:8px 15px; margin-left:10px;">Đăng xuất</button>
-        </div>
-        <h3 style="padding: 0 10px;">Bài đăng của bạn</h3>
-        <div id="my-posts-list"></div>
-    </div>
-</div>
-
-<script>
-    let users = JSON.parse(localStorage.getItem('cmf_users')) || {};
-    let posts = JSON.parse(localStorage.getItem('cmf_posts')) || [];
-    let currentUser = null;
-
-    window.onload = () => {
-        let saved = localStorage.getItem('cmf_logged_in_user');
-        if(saved && users[saved]) { currentUser = users[saved]; startApp(); }
-    };
-
-    function saveData() { localStorage.setItem('cmf_users', JSON.stringify(users)); localStorage.setItem('cmf_posts', JSON.stringify(posts)); }
-    function logout() { localStorage.removeItem('cmf_logged_in_user'); location.reload(); }
 
     function toggleAuth(isLogin) {
         document.getElementById('login-form').classList.toggle('hidden', !isLogin);
         document.getElementById('reg-form').classList.toggle('hidden', isLogin);
     }
 
-    function handleRegister() {
-        let u = document.getElementById('reg-user').value.trim();
-        let p = document.getElementById('reg-pass').value.trim();
-        if(u.length < 3 || p.length < 6) return alert("Tên > 3 ký tự, Pass > 6 ký tự!");
-        if(users[u]) return alert("Tài khoản đã có người dùng!");
-        users[u] = { username: u, password: p, name: u, avatar: 'https://www.w3schools.com/howto/img_avatar.png', friends: [], requests: [], lastRename: 0 };
-        saveData(); alert("Đăng ký thành công!"); toggleAuth(true);
-    }
-
-    function handleLogin() {
-        let u = document.getElementById('login-user').value.trim();
-        let p = document.getElementById('login-pass').value.trim();
-        if(users[u] && users[u].password === p) {
-            currentUser = users[u];
-            localStorage.setItem('cmf_logged_in_user', u);
-            startApp();
-        } else alert("Sai tài khoản hoặc mật khẩu!");
-    }
-
-    function startApp() {
-        document.getElementById('auth-screen').classList.add('hidden');
-        document.getElementById('main-app').classList.remove('hidden');
-        updateUI();
-        showPage('home');
-    }
-
-    function showPage(p) {
-        document.querySelectorAll('.container').forEach(c => c.classList.add('hidden'));
-        document.getElementById('page-' + p).classList.remove('hidden');
-        if(p === 'notif') renderRequests();
-        if(p === 'profile') renderMyPosts();
-    }
+    function logout() { localStorage.removeItem('cmf_logged_in_user'); location.reload(); }
+    function saveData() { localStorage.setItem('cmf_users', JSON.stringify(users)); localStorage.setItem('cmf_posts', JSON.stringify(posts)); }
 
     function updateUI() {
         document.getElementById('profile-name').innerText = currentUser.name;
         document.getElementById('my-avatar').src = currentUser.avatar;
         document.getElementById('post-avt').src = currentUser.avatar;
-        
         let badge = document.getElementById('notif-badge');
         badge.innerText = currentUser.requests.length;
         badge.classList.toggle('hidden', currentUser.requests.length === 0);
-
-        // Hiển thị thông tin ngày đổi tên
-        if(currentUser.lastRename) {
-            let nextDate = new Date(currentUser.lastRename + (14 * 24 * 60 * 60 * 1000));
-            document.getElementById('next-rename-info').innerText = "Ngày có thể đổi tên tiếp theo: " + nextDate.toLocaleDateString();
-        }
         renderPosts();
     }
 
-    function editName() {
-        let now = Date.now();
-        let twoWeeks = 14 * 24 * 60 * 60 * 1000;
-        
-        if (currentUser.lastRename && (now - currentUser.lastRename < twoWeeks)) {
-            let waitDays = Math.ceil((twoWeeks - (now - currentUser.lastRename)) / (24 * 60 * 60 * 1000));
-            alert("Bạn cần đợi thêm " + waitDays + " ngày nữa mới có thể đổi tên!");
-            return;
-        }
-
-        let newName = prompt("Nhập tên hiển thị mới:", currentUser.name);
-        if (newName && newName.trim() !== "") {
-            currentUser.name = newName.trim();
-            currentUser.lastRename = now;
-            saveData();
-            updateUI();
-            alert("Đổi tên thành công!");
-        }
-    }
-
-    // TÌM KIẾM
-    function doSearch() {
-        let q = document.getElementById('search-input').value.toLowerCase().trim();
-        let resDiv = document.getElementById('search-results');
-        resDiv.innerHTML = "";
-        if(!q) return;
-        Object.keys(users).forEach(u => {
-            if(u !== currentUser.username && u.toLowerCase().includes(q)) {
-                let isF = currentUser.friends.includes(u);
-                let isS = users[u].requests.includes(currentUser.username);
-                resDiv.innerHTML += `
-                    <div class="user-item card">
-                        <img src="${users[u].avatar}" class="avatar">
-                        <div class="user-info"><b>${users[u].name}</b></div>
-                        ${isF ? '<span>Bạn bè</span>' : `<button class="btn-action" style="background:var(--primary); color:white; border:none; border-radius:5px;" onclick="sendReq('${u}')" ${isS?'disabled':''}>${isS?'Đã gửi':'Kết bạn'}</button>`}
-                    </div>`;
-            }
-        });
-    }
-
-    function sendReq(target) {
-        if(!users[target].requests.includes(currentUser.username)) {
-            users[target].requests.push(currentUser.username);
-            saveData(); doSearch(); alert("Đã gửi lời mời!");
-        }
-    }
-
-    function renderRequests() {
-        let list = document.getElementById('request-list');
-        list.innerHTML = currentUser.requests.length ? "" : "Không có lời mời nào.";
-        currentUser.requests.forEach(u => {
-            list.innerHTML += `
-                <div class="user-item card">
-                    <img src="${users[u].avatar}" class="avatar">
-                    <div class="user-info"><b>${users[u].name}</b></div>
-                    <button class="btn-action" style="background:var(--primary); color:white; border:none; margin-right:5px; border-radius:5px;" onclick="acceptReq('${u}')">Đồng ý</button>
-                    <button class="btn-action" style="background:#ddd; border:none; border-radius:5px;" onclick="rejectReq('${u}')">Xóa</button>
-                </div>`;
-        });
-    }
-
-    function acceptReq(u) {
-        currentUser.friends.push(u); users[u].friends.push(currentUser.username);
-        currentUser.requests = currentUser.requests.filter(x => x !== u);
-        saveData(); updateUI(); renderRequests();
-    }
-    function rejectReq(u) { currentUser.requests = currentUser.requests.filter(x => x !== u); saveData(); renderRequests(); }
-
-    // BÀI ĐĂNG
     function createPost() {
         let txt = document.getElementById('post-text').value;
-        let file = document.getElementById('post-file').files[0];
+        let fileInput = document.getElementById('post-file');
+        let file = fileInput.files[0];
         if(!txt && !file) return;
+
         let p = { id: Date.now(), author: currentUser.username, authorName: currentUser.name, content: txt, media: '', time: new Date().toLocaleString() };
+        
         if(file) {
             let r = new FileReader();
-            r.onload = (e) => { p.media = e.target.result; posts.unshift(p); finishP(); };
+            r.onload = (e) => { 
+                p.media = e.target.result; 
+                posts.unshift(p); 
+                saveData(); renderPosts();
+                document.getElementById('post-text').value = ""; 
+                fileInput.value = "";
+            };
             r.readAsDataURL(file);
-        } else { posts.unshift(p); finishP(); }
-    }
-
-    function finishP() { saveData(); renderPosts(); document.getElementById('post-text').value = ""; document.getElementById('post-file').value = ""; }
-
-    function deletePost(id) {
-        if(confirm("Bạn có chắc chắn muốn gỡ bài viết này?")) {
-            posts = posts.filter(p => p.id !== id);
-            saveData();
-            renderPosts();
-            renderMyPosts();
+        } else {
+            posts.unshift(p); saveData(); renderPosts();
+            document.getElementById('post-text').value = "";
         }
     }
 
@@ -566,10 +205,10 @@
         let feed = document.getElementById('newsfeed');
         feed.innerHTML = "";
         posts.forEach(p => {
-            let isV = p.media.includes('video');
+            let isV = p.media && p.media.includes('video');
             feed.innerHTML += `
                 <div class="card">
-                    <div class="post-header">
+                    <div style="display:flex; justify-content:space-between;">
                         <div style="display:flex; gap:10px;">
                             <img src="${users[p.author]?.avatar}" class="avatar">
                             <div><b>${p.authorName}</b><br><small>${p.time}</small></div>
@@ -582,16 +221,67 @@
         });
     }
 
+    function deletePost(id) {
+        if(confirm("Bạn muốn gỡ bài viết này?")) {
+            posts = posts.filter(p => p.id !== id);
+            saveData(); renderPosts(); if(!document.getElementById('page-profile').classList.contains('hidden')) renderMyPosts();
+        }
+    }
+
+    function editName() {
+        let now = Date.now();
+        if (currentUser.lastRename && (now - currentUser.lastRename < 14*24*60*60*1000)) {
+            alert("Bạn chỉ được đổi tên 2 tuần 1 lần!"); return;
+        }
+        let n = prompt("Tên mới:", currentUser.name);
+        if(n) { currentUser.name = n; currentUser.lastRename = now; saveData(); updateUI(); }
+    }
+
+    function doSearch() {
+        let q = document.getElementById('search-input').value.toLowerCase().trim();
+        let res = document.getElementById('search-results');
+        res.innerHTML = ""; if(!q) return;
+        Object.keys(users).forEach(u => {
+            if(u !== currentUser.username && u.toLowerCase().includes(q)) {
+                let isF = currentUser.friends.includes(u);
+                let isS = users[u].requests.includes(currentUser.username);
+                res.innerHTML += `
+                    <div class="user-item card" style="display:flex; align-items:center; gap:10px;">
+                        <img src="${users[u].avatar}" class="avatar">
+                        <div style="flex-grow:1"><b>${users[u].name}</b></div>
+                        ${isF ? '<span>Bạn bè</span>' : `<button onclick="sendReq('${u}')" ${isS?'disabled':''}>${isS?'Đã gửi':'Kết bạn'}</button>`}
+                    </div>`;
+            }
+        });
+    }
+
+    function sendReq(t) { users[t].requests.push(currentUser.username); saveData(); doSearch(); alert("Đã gửi!"); }
+
+    function renderRequests() {
+        let l = document.getElementById('request-list');
+        l.innerHTML = currentUser.requests.length ? "" : "Không có lời mời.";
+        currentUser.requests.forEach(u => {
+            l.innerHTML += `<div style="display:flex; align-items:center; gap:10px; margin-bottom:10px;">
+                <img src="${users[u].avatar}" class="avatar"><b>${users[u].name}</b>
+                <button onclick="acceptReq('${u}')">Đồng ý</button>
+            </div>`;
+        });
+    }
+
+    function acceptReq(u) {
+        currentUser.friends.push(u); users[u].friends.push(currentUser.username);
+        currentUser.requests = currentUser.requests.filter(x => x !== u);
+        saveData(); updateUI(); renderRequests();
+    }
+
     function renderMyPosts() {
-        let list = document.getElementById('my-posts-list');
-        list.innerHTML = "";
-        let myPosts = posts.filter(p => p.author === currentUser.username);
-        myPosts.forEach(p => {
-            list.innerHTML += `<div class="card"><b>${p.time}</b><br>${p.content.substring(0, 50)}... <button class="btn-delete" onclick="deletePost(${p.id})">Gỡ bài</button></div>`;
+        let l = document.getElementById('my-posts-list');
+        l.innerHTML = "";
+        posts.filter(p => p.author === currentUser.username).forEach(p => {
+            l.innerHTML += `<div class="card">${p.content.substring(0,30)}... <button class="btn-delete" onclick="deletePost(${p.id})">Gỡ</button></div>`;
         });
     }
 </script>
-
 </body>
-    </html>
- # ChatMiFan   
+</html>
+# ChatMiFan
