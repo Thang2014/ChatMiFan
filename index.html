@@ -3,174 +3,119 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ChatMiFan</title>
+    <title>ChatMiFan Full</title>
     <style>
         :root { --primary: #0084ff; --bg: #f0f2f5; }
-        body { font-family: Arial, sans-serif; background: var(--bg); margin: 0; padding: 0; overflow-x: hidden; }
+        body { font-family: sans-serif; background: var(--bg); margin: 0; }
         .hidden { display: none !important; }
-        
-        /* Auth Screen */
-        #auth-screen { width: 100%; min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; background: white; position: fixed; top: 0; left: 0; z-index: 1000; }
-        .auth-box { width: 320px; padding: 25px; border-radius: 12px; box-shadow: 0 8px 24px rgba(0,0,0,0.1); text-align: center; }
-        input { width: 90%; padding: 12px; margin: 10px 0; border: 1px solid #ddd; border-radius: 8px; font-size: 14px; outline: none; }
-        button { width: 100%; padding: 12px; background: var(--primary); color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; margin-top: 10px; }
-
-        /* Header Mới */
-        header { background: white; padding: 10px; position: sticky; top: 0; box-shadow: 0 2px 4px rgba(0,0,0,0.1); z-index: 100; text-align: center; }
-        .header-top { display: flex; justify-content: center; align-items: center; gap: 10px; margin-bottom: 10px; }
-        .header-icon { background: #e4e6eb; width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 18px; border: none; position: relative; }
-        .badge { position: absolute; top: -2px; right: -2px; background: red; color: white; font-size: 10px; padding: 2px 5px; border-radius: 10px; }
-        .logo { color: var(--primary); font-weight: bold; font-size: 20px; }
-        nav { display: flex; justify-content: center; gap: 15px; }
-        nav button { background: none; border: none; font-size: 22px; cursor: pointer; }
-
-        /* Container */
-        .container { max-width: 550px; margin: 15px auto; padding: 0 10px; min-height: 90vh; }
-        .card { background: white; padding: 15px; border-radius: 10px; margin-bottom: 15px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
-        .avatar { width: 45px; height: 45px; border-radius: 50%; object-fit: cover; background: #eee; }
-        .post-media { width: calc(100% + 30px); margin-left: -15px; max-height: 450px; object-fit: cover; margin-top: 10px; }
-        .btn-delete { color: #ff4444; background: none; border: none; font-size: 12px; cursor: pointer; font-weight: bold; }
-        .btn-game { background: #28a745; width: auto; padding: 5px 15px; }
+        .container { max-width: 500px; margin: auto; padding: 10px; }
+        .card { background: white; padding: 15px; border-radius: 10px; margin-bottom: 10px; }
+        .header-icon { width: 40px; height: 40px; background: #e4e6eb; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; }
+        /* Game Styles */
+        #game-canvas { width: 100%; height: 250px; background: #222; position: relative; overflow: hidden; margin-top: 10px; }
+        .item { width: 25px; height: 25px; background: gold; position: absolute; border-radius: 50%; }
+        #basket { width: 70px; height: 15px; background: var(--primary); position: absolute; bottom: 0; }
     </style>
 </head>
 <body>
 
 <div id="auth-screen">
-    <div class="auth-box">
-        <h1 style="color: var(--primary); margin-bottom: 20px;">ChatMiFan</h1>
-        <div id="login-form">
-            <input type="text" id="login-user" placeholder="Tên tài khoản">
-            <input type="password" id="login-pass" placeholder="Mật khẩu">
-            <button onclick="handleLogin()">Đăng nhập</button>
-            <p onclick="toggleAuth(false)" style="cursor:pointer; color:var(--primary); font-size: 14px; margin-top: 15px;">Đăng ký tài khoản</p>
-        </div>
-        <div id="reg-form" class="hidden">
-            <input type="text" id="reg-user" placeholder="Tên muốn tạo">
-            <input type="password" id="reg-pass" placeholder="Mật khẩu (6 ký tự)">
-            <button onclick="handleRegister()">Đăng ký</button>
-            <p onclick="toggleAuth(true)" style="cursor:pointer; color:var(--primary); font-size: 14px; margin-top: 15px;">Quay lại đăng nhập</p>
-        </div>
-    </div>
+    <div style="text-align:center; padding-top:100px;"><h1>ChatMiFan</h1>
+    <input type="text" id="login-user" placeholder="Tên tài khoản"><br>
+    <button onclick="handleLogin()">Đăng nhập</button></div>
 </div>
 
 <div id="main-app" class="hidden">
-    <header>
-        <div class="header-top">
-            <div class="header-icon" onclick="showPage('games')" title="Game">🎮</div>
-            <div class="logo">ChatMiFan</div>
-            <div id="online-count" style="font-size:11px; border:1px solid #ccc; padding:2px 5px; border-radius:4px;">128 đang online</div>
-        </div>
-        <nav>
-            <button onclick="showPage('notif')">🔔<span id="notif-badge" class="badge hidden">0</span></button>
-            <button onclick="showPage('home')">🏠</button>
-            <button onclick="showPage('search')">🔍</button>
-            <button onclick="showPage('profile')">👤</button>
-        </nav>
+    <header style="background:white; padding:10px; display:flex; justify-content:space-around; align-items:center; position:sticky; top:0; z-index:100;">
+        <div class="header-icon" onclick="showPage('games')">🎮</div>
+        <strong>ChatMiFan</strong>
+        <div id="online-count" style="font-size:11px;">142 đang online</div>
     </header>
 
-    <div id="page-games" class="page container hidden">
-        <h3>Trung tâm Game</h3>
-        <div class="card">
-            <p>Hứng quà (+10 điểm)</p>
-            <button class="btn-game" onclick="playGame()">Play</button>
-        </div>
-        <div class="card">
-            <p>Toán siêu tốc (+10 điểm)</p>
-            <button class="btn-game" onclick="playGame()">Play</button>
-        </div>
-    </div>
-
     <div id="page-home" class="page container">
-        <div class="card">
-            <input type="text" id="post-text" placeholder="Bạn đang nghĩ gì?" style="width:90%">
-            <button onclick="createPost()">Đăng bài</button>
-        </div>
+        <div class="card"><input type="text" id="post-text" placeholder="Đăng gì đó..."> <button onclick="addPost()">Đăng</button></div>
         <div id="newsfeed"></div>
     </div>
 
-    <div id="page-search" class="page container hidden">
-        <div class="card"><input type="text" id="search-input" placeholder="Tìm tên..." onkeyup="doSearch()"></div>
-        <div id="search-results"></div>
-    </div>
-
-    <div id="page-notif" class="page container hidden"><div class="card"><h3>Lời mời</h3><div id="request-list"></div></div></div>
-
-    <div id="page-profile" class="page container hidden">
-        <div class="card" style="text-align: center;">
-            <h2 id="profile-name"></h2>
-            <p>Điểm: <span id="my-score">0</span></p>
-            <button onclick="editName()">Đổi tên</button>
-            <button onclick="logout()" style="background:#ff4444;">Đăng xuất</button>
+    <div id="page-games" class="page container hidden">
+        <div class="card">
+            <h3>Bảng Xếp Hạng</h3>
+            <div id="leaderboard"></div>
+        </div>
+        <div class="card">
+            <h3>Game Hứng quà</h3>
+            <div id="game-canvas" onmousemove="moveBasket(event)"><div id="basket"></div></div>
+            <button onclick="startGame()">Bắt đầu chơi</button>
         </div>
     </div>
 </div>
 
 <script>
     let users = JSON.parse(localStorage.getItem('cmf_users')) || {};
-    let posts = JSON.parse(localStorage.getItem('cmf_posts')) || [];
-    let currentUser = null;
+    let currentUser = JSON.parse(localStorage.getItem('cmf_me'));
 
-    // CẬP NHẬT NGƯỜI ONLINE
-    setInterval(() => {
-        document.getElementById('online-count').innerText = (120 + Math.floor(Math.random()*30)) + " đang online";
-    }, 5000);
-
-    // GAME LOGIC
-    function playGame() {
-        if(confirm("Thắng sẽ được +10 điểm. Bắt đầu ngay?")) {
-            alert("Chúc mừng thắng cuộc! +10 điểm.");
-            currentUser.score = (currentUser.score || 0) + 10;
-            saveUser();
-            updateUI();
-        } else { alert("Bạn đã thua!"); }
-    }
-
-    function saveUser() {
-        users[currentUser.username] = currentUser;
+    function handleLogin() {
+        let u = document.getElementById('login-user').value;
+        if(!u) return;
+        if(!users[u]) users[u] = { name: u, score: 0 };
+        currentUser = users[u];
+        localStorage.setItem('cmf_me', JSON.stringify(currentUser));
         localStorage.setItem('cmf_users', JSON.stringify(users));
-        localStorage.setItem('cmf_logged_in_user', currentUser.username);
+        location.reload();
     }
 
-    // Các hàm cũ (giữ nguyên để không ảnh hưởng logic của bạn)
-    function startApp() {
+    function showPage(p) {
+        document.querySelectorAll('.page').forEach(el => el.classList.add('hidden'));
+        document.getElementById('page-' + p).classList.remove('hidden');
+        if(p === 'games') updateLeaderboard();
+    }
+
+    function updateLeaderboard() {
+        let sorted = Object.values(users).sort((a,b) => b.score - a.score);
+        document.getElementById('leaderboard').innerHTML = sorted.map((u,i) => `<div>${i+1}. ${u.name}: ${u.score}đ</div>`).join('');
+    }
+
+    let basketX = 0;
+    function moveBasket(e) {
+        basketX = e.clientX - 100;
+        document.getElementById('basket').style.left = basketX + 'px';
+    }
+
+    function startGame() {
+        let score = 0;
+        let canvas = document.getElementById('game-canvas');
+        let game = setInterval(() => {
+            let item = document.createElement('div');
+            item.className = 'item';
+            item.style.left = Math.random() * 250 + 'px';
+            canvas.appendChild(item);
+            let pos = 0;
+            let fall = setInterval(() => {
+                pos += 5;
+                item.style.top = pos + 'px';
+                if(pos > 220 && parseInt(item.style.left) > basketX && parseInt(item.style.left) < basketX + 70) {
+                    score++; item.remove();
+                }
+                if(pos > 250) { clearInterval(fall); item.remove(); }
+                if(score >= 5) {
+                    clearInterval(game); clearInterval(fall);
+                    alert("Thắng! +10 điểm");
+                    currentUser.score += 10;
+                    localStorage.setItem('cmf_me', JSON.stringify(currentUser));
+                    localStorage.setItem('cmf_users', JSON.stringify(users));
+                    updateLeaderboard();
+                }
+            }, 30);
+        }, 1000);
+    }
+
+    // Khởi tạo
+    if(currentUser) {
         document.getElementById('auth-screen').classList.add('hidden');
         document.getElementById('main-app').classList.remove('hidden');
-        updateUI();
     }
-
-    function updateUI() {
-        document.getElementById('profile-name').innerText = currentUser.name;
-        document.getElementById('my-score').innerText = currentUser.score || 0;
-    }
-
-    // ... (Giữ nguyên các hàm handleLogin, handleRegister, showPage, createPost... của bạn)
-    function handleLogin() {
-        let u = document.getElementById('login-user').value.trim();
-        let p = document.getElementById('login-pass').value.trim();
-        if(users[u] && users[u].password === p) {
-            currentUser = users[u];
-            localStorage.setItem('cmf_logged_in_user', u);
-            startApp();
-        } else alert("Sai!");
-    }
-
-    function handleRegister() {
-        let u = document.getElementById('reg-user').value.trim();
-        let p = document.getElementById('reg-pass').value.trim();
-        users[u] = { username: u, password: p, name: u, score: 0, avatar: '', friends: [], requests: [] };
-        saveUser(); alert("OK!");
-    }
-
-    function toggleAuth(l) { document.getElementById('login-form').classList.toggle('hidden', !l); document.getElementById('reg-form').classList.toggle('hidden', l); }
-    function showPage(p) { document.querySelectorAll('.page').forEach(el => el.classList.add('hidden')); document.getElementById('page-'+p).classList.remove('hidden'); }
-    function logout() { localStorage.removeItem('cmf_logged_in_user'); location.reload(); }
-    
-    window.onload = () => {
-        let saved = localStorage.getItem('cmf_logged_in_user');
-        if(saved && users[saved]) { currentUser = users[saved]; startApp(); }
-    };
+    setInterval(() => document.getElementById('online-count').innerText = (120 + Math.floor(Math.random()*30)) + " online", 5000);
 </script>
 </body>
 </html>
 # ChatMiFan
-                                              
