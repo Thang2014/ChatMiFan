@@ -6,38 +6,51 @@
     <title>ChatMiFan</title>
     <style>
         :root { --primary: #0084ff; --bg: #f0f2f5; }
-        body { font-family: Arial, sans-serif; background: var(--bg); margin: 0; }
+        body { font-family: Arial, sans-serif; background: var(--bg); margin: 0; padding: 0; }
         .hidden { display: none !important; }
-        .card { background: white; padding: 15px; border-radius: 10px; margin-bottom: 15px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+        
+        /* Auth Screen */
+        #auth-screen { width: 100%; min-height: 100vh; display: flex; align-items: center; justify-content: center; background: white; position: fixed; top: 0; z-index: 1000; }
+        .auth-box { width: 300px; padding: 20px; text-align: center; border: 1px solid #ddd; border-radius: 10px; }
+        input { width: 90%; padding: 10px; margin: 5px 0; border: 1px solid #ccc; border-radius: 5px; }
+        button { width: 95%; padding: 10px; background: var(--primary); color: white; border: none; border-radius: 5px; cursor: pointer; margin-top: 10px; }
+
+        /* App */
+        header { background: white; padding: 10px; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; border-bottom: 1px solid #ddd; }
         .container { max-width: 500px; margin: auto; padding: 10px; }
-        .avatar { width: 60px; height: 60px; border-radius: 50%; object-fit: cover; }
+        .card { background: white; padding: 15px; border-radius: 10px; margin-bottom: 10px; box-shadow: 0 1px 2px rgba(0,0,0,0.1); }
         .post-media { width: 100%; margin-top: 10px; }
+        nav { display: flex; gap: 15px; }
     </style>
 </head>
 <body>
 
 <div id="auth-screen">
-    <div class="container card" style="text-align:center;">
-        <h1>ChatMiFan</h1>
+    <div class="auth-box">
+        <h2>ChatMiFan</h2>
         <div id="login-form">
-            <input type="text" id="login-user" placeholder="Tên tài khoản"><br>
-            <input type="password" id="login-pass" placeholder="Mật khẩu"><br>
+            <input type="text" id="login-user" placeholder="Tên tài khoản">
+            <input type="password" id="login-pass" placeholder="Mật khẩu">
             <button onclick="handleLogin()">Đăng nhập</button>
-            <p onclick="toggleAuth(false)" style="color:var(--primary); cursor:pointer;">Đăng ký tài khoản mới</p>
+            <p onclick="toggleAuth(false)" style="color:blue; cursor:pointer;">Đăng ký tài khoản</p>
         </div>
         <div id="reg-form" class="hidden">
-            <input type="text" id="reg-user" placeholder="Tên muốn tạo"><br>
-            <input type="password" id="reg-pass" placeholder="Mật khẩu (6 ký tự)"><br>
+            <input type="text" id="reg-user" placeholder="Tên muốn tạo">
+            <input type="password" id="reg-pass" placeholder="Mật khẩu">
             <button onclick="handleRegister()">Đăng ký</button>
-            <p onclick="toggleAuth(true)" style="color:var(--primary); cursor:pointer;">Quay lại đăng nhập</p>
+            <p onclick="toggleAuth(true)" style="color:blue; cursor:pointer;">Quay lại</p>
         </div>
     </div>
 </div>
 
 <div id="main-app" class="hidden">
-    <header style="background:white; padding:10px; text-align:center; position:sticky; top:0;">
-        <strong>ChatMiFan</strong> | <span id="online-count">0 đang online</span>
-        <nav><button onclick="showPage('home')">🏠</button><button onclick="showPage('notif')">🔔</button><button onclick="showPage('messenger')">💬</button><button onclick="showPage('profile')">👤</button></nav>
+    <header>
+        <strong>ChatMiFan</strong>
+        <div id="online-count">0 đang online</div>
+        <nav>
+            <button onclick="showPage('home')">🏠</button>
+            <button onclick="showPage('profile')">👤</button>
+        </nav>
     </header>
 
     <div id="page-home" class="page container">
@@ -53,9 +66,9 @@
         <div class="card" style="text-align:center;">
             <h2 id="profile-name"></h2>
             <button onclick="editName()">Đổi tên</button>
-            <button onclick="logout()" style="background:red; color:white;">Đăng xuất</button>
+            <button onclick="logout()" style="background:red;">Đăng xuất</button>
         </div>
-        <h3>Bài đăng của tôi:</h3>
+        <h3>Bài của tôi:</h3>
         <div id="my-posts"></div>
     </div>
 </div>
@@ -68,10 +81,7 @@
     // Ghi nhớ đăng nhập
     window.onload = () => {
         let saved = localStorage.getItem('cmf_logged_in_user');
-        if(saved && users[saved]) {
-            currentUser = users[saved];
-            startApp();
-        }
+        if(saved && users[saved]) { currentUser = users[saved]; startApp(); }
     };
 
     function startApp() {
@@ -89,18 +99,20 @@
             currentUser = users[u];
             localStorage.setItem('cmf_logged_in_user', u);
             startApp();
-        } else alert("Sai thông tin!");
+        } else alert("Sai tài khoản hoặc mật khẩu!");
     }
 
     function handleRegister() {
         let u = document.getElementById('reg-user').value.trim();
         let p = document.getElementById('reg-pass').value.trim();
-        if(users[u]) return alert("Đã tồn tại!");
+        if(users[u]) return alert("Tài khoản đã tồn tại!");
         users[u] = { username: u, password: p, name: u };
         localStorage.setItem('cmf_users', JSON.stringify(users));
         alert("Đăng ký thành công!"); toggleAuth(true);
     }
 
+    function toggleAuth(l) { document.getElementById('login-form').classList.toggle('hidden', !l); document.getElementById('reg-form').classList.toggle('hidden', l); }
+    
     function createPost() {
         let txt = document.getElementById('post-text').value;
         let file = document.getElementById('post-file').files[0];
@@ -133,7 +145,6 @@
         renderAll();
     }
 
-    function toggleAuth(l) { document.getElementById('login-form').classList.toggle('hidden', !l); document.getElementById('reg-form').classList.toggle('hidden', l); }
     function showPage(p) { document.querySelectorAll('.page').forEach(el => el.classList.add('hidden')); document.getElementById('page-'+p).classList.remove('hidden'); }
     function logout() { localStorage.removeItem('cmf_logged_in_user'); location.reload(); }
     function editName() { let n = prompt("Tên mới:", currentUser.name); if(n) { currentUser.name = n; localStorage.setItem('cmf_users', JSON.stringify(users)); location.reload(); } }
