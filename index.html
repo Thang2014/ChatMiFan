@@ -37,7 +37,7 @@
         </div>
         <div id="reg-form" class="hidden">
             <input type="text" id="reg-user" placeholder="Tên muốn tạo">
-            <input type="password" id="reg-pass" placeholder="Mật khẩu (6 ký tự)">
+            <input type="password" id="reg-pass" placeholder="Mật khẩu (ít nhất 6 ký tự)">
             <button onclick="handleRegister()">Đăng ký</button>
             <p onclick="toggleAuth(true)" style="cursor:pointer; color:var(--primary); font-size: 14px; margin-top: 15px;">Quay lại đăng nhập</p>
         </div>
@@ -77,9 +77,7 @@
     let users = JSON.parse(localStorage.getItem('cmf_users')) || {};
     let currentUser = null;
 
-    // Logic Đếm người online thực tế
     function updateOnlineCount() {
-        // Nếu đã đăng nhập, tính là 1, cộng thêm các user khác đã lưu
         let count = currentUser ? 1 : 0;
         document.getElementById('online-count').innerText = count + " đang online";
     }
@@ -98,25 +96,38 @@
             currentUser = users[u];
             localStorage.setItem('cmf_logged_in_user', u);
             startApp();
-        } else alert("Sai tài khoản!");
+        } else alert("Sai tài khoản hoặc mật khẩu!");
     }
 
     function handleRegister() {
         let u = document.getElementById('reg-user').value.trim();
         let p = document.getElementById('reg-pass').value.trim();
+        if(u.length < 3 || p.length < 6) { alert("Tên > 3, Mật khẩu > 6 ký tự!"); return; }
+        if(users[u]) { alert("Tài khoản đã tồn tại!"); return; }
         users[u] = { username: u, password: p, name: u };
         localStorage.setItem('cmf_users', JSON.stringify(users));
-        alert("Đăng ký xong!"); toggleAuth(true);
+        alert("Đăng ký thành công!"); toggleAuth(true);
     }
 
-    function toggleAuth(l) { document.getElementById('login-form').classList.toggle('hidden', !l); document.getElementById('reg-form').classList.toggle('hidden', l); }
-    function showPage(p) { document.querySelectorAll('.page').forEach(el => el.classList.add('hidden')); document.getElementById('page-'+p).classList.remove('hidden'); }
-    function logout() { localStorage.removeItem('cmf_logged_in_user'); location.reload(); }
+    function toggleAuth(l) { 
+        document.getElementById('login-form').classList.toggle('hidden', !l); 
+        document.getElementById('reg-form').classList.toggle('hidden', l); 
+    }
+    
+    function showPage(p) { 
+        document.querySelectorAll('.page').forEach(el => el.classList.add('hidden')); 
+        document.getElementById('page-'+p).classList.remove('hidden'); 
+    }
+    
+    function logout() { 
+        localStorage.removeItem('cmf_logged_in_user'); 
+        location.reload(); 
+    }
     
     window.onload = () => {
         let saved = localStorage.getItem('cmf_logged_in_user');
         if(saved && users[saved]) { currentUser = users[saved]; startApp(); }
-        else updateOnlineCount(); // Ban đầu là 0
+        else updateOnlineCount();
     };
 </script>
 </body>
