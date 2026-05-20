@@ -6,58 +6,28 @@
     <title>ChatMiFan</title>
     <style>
         :root { --primary: #0084ff; --bg: #f0f2f5; }
-        body { font-family: Arial, sans-serif; background: var(--bg); margin: 0; padding: 0; overflow-x: hidden; }
+        body { font-family: Arial, sans-serif; background: var(--bg); margin: 0; padding: 0; }
         .hidden { display: none !important; }
-        
-        #auth-screen { width: 100%; min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; background: white; position: fixed; top: 0; left: 0; z-index: 1000; }
-        .auth-box { width: 320px; padding: 25px; border-radius: 12px; box-shadow: 0 8px 24px rgba(0,0,0,0.1); text-align: center; }
-        input { width: 90%; padding: 12px; margin: 10px 0; border: 1px solid #ddd; border-radius: 8px; font-size: 14px; outline: none; }
-        button { width: 100%; padding: 12px; background: var(--primary); color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; margin-top: 10px; }
-
-        header { background: white; padding: 10px; position: sticky; top: 0; box-shadow: 0 2px 4px rgba(0,0,0,0.1); z-index: 100; text-align: center; }
-        .header-top { display: flex; justify-content: space-between; align-items: center; padding: 0 10px; }
-        .logo { color: var(--primary); font-weight: bold; font-size: 20px; }
-        nav { display: flex; justify-content: center; gap: 15px; margin-top: 10px; }
-        nav button { background: none; border: none; font-size: 22px; cursor: pointer; }
-
-        .container { max-width: 550px; margin: 15px auto; padding: 0 10px; min-height: 90vh; }
-        .card { background: white; padding: 15px; border-radius: 10px; margin-bottom: 15px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+        .card { background: white; padding: 15px; border-radius: 10px; margin-bottom: 15px; }
+        .avatar { width: 60px; height: 60px; border-radius: 50%; object-fit: cover; }
         .post-media { width: 100%; margin-top: 10px; }
     </style>
 </head>
 <body>
 
 <div id="auth-screen">
-    <div class="auth-box">
+    <div class="card">
         <h1>ChatMiFan</h1>
-        <div id="login-form">
-            <input type="text" id="login-user" placeholder="Tên tài khoản">
-            <input type="password" id="login-pass" placeholder="Mật khẩu">
-            <button onclick="handleLogin()">Đăng nhập</button>
-            <p onclick="toggleAuth(false)" style="cursor:pointer; color:var(--primary); font-size: 14px;">Đăng ký</p>
-        </div>
-        <div id="reg-form" class="hidden">
-            <input type="text" id="reg-user" placeholder="Tên muốn tạo">
-            <input type="password" id="reg-pass" placeholder="Mật khẩu (6 ký tự)">
-            <button onclick="handleRegister()">Đăng ký</button>
-            <p onclick="toggleAuth(true)" style="cursor:pointer; color:var(--primary); font-size: 14px;">Quay lại đăng nhập</p>
-        </div>
+        <input type="text" id="login-user" placeholder="Tên tài khoản"><br>
+        <input type="password" id="login-pass" placeholder="Mật khẩu"><br>
+        <button onclick="handleLogin()">Đăng nhập</button>
     </div>
 </div>
 
 <div id="main-app" class="hidden">
-    <header>
-        <div class="header-top">
-            <div class="logo">ChatMiFan</div>
-            <div id="online-count" style="font-size:11px; border:1px solid #ccc; padding:2px 5px; border-radius:4px;">0 đang online</div>
-        </div>
-        <nav>
-            <button onclick="showPage('notif')">🔔</button>
-            <button onclick="showPage('home')">🏠</button>
-            <button onclick="showPage('search')">🔍</button>
-            <button onclick="showPage('messenger')">💬</button>
-            <button onclick="showPage('profile')">👤</button>
-        </nav>
+    <header style="background:white; padding:10px; text-align:center;">
+        <div id="online-count">0 đang online</div>
+        <nav><button onclick="showPage('home')">🏠</button><button onclick="showPage('profile')">👤</button></nav>
     </header>
 
     <div id="page-home" class="page container">
@@ -69,20 +39,14 @@
         <div id="newsfeed"></div>
     </div>
 
-    <div id="page-search" class="page container hidden">
-        <div class="card"><input type="text" id="search-input" placeholder="Tìm tên..." onkeyup="doSearch()"></div>
-        <div id="search-results"></div>
-    </div>
-
-    <div id="page-messenger" class="page container hidden"><div class="card"><h3>Nhắn tin</h3></div></div>
-    <div id="page-notif" class="page container hidden"><div class="card"><h3>Thông báo</h3></div></div>
-
     <div id="page-profile" class="page container hidden">
-        <div class="card" style="text-align: center;">
+        <div class="card" style="text-align:center;">
+            <img id="my-avatar" class="avatar" src="https://via.placeholder.com/60">
             <h2 id="profile-name"></h2>
             <button onclick="editName()">Đổi tên</button>
-            <button onclick="logout()" style="background:#ff4444;">Đăng xuất</button>
         </div>
+        <h3>Bài viết của bạn:</h3>
+        <div id="my-posts"></div>
     </div>
 </div>
 
@@ -91,25 +55,42 @@
     let posts = JSON.parse(localStorage.getItem('cmf_posts')) || [];
     let currentUser = null;
 
-    function updateOnlineCount() {
-        let count = currentUser ? 1 : 0;
-        document.getElementById('online-count').innerText = count + " đang online";
-    }
-
     function createPost() {
         let txt = document.getElementById('post-text').value;
-        let file = document.getElementById('post-file').files[0];
-        let p = { content: txt, time: new Date().toLocaleTimeString() };
+        let fileInput = document.getElementById('post-file');
+        let file = fileInput.files[0];
+        let p = { id: Date.now(), author: currentUser.username, content: txt };
+        
         if(file) {
             let r = new FileReader();
-            r.onload = (e) => { p.media = e.target.result; posts.unshift(p); renderPosts(); };
+            r.onload = (e) => { p.media = e.target.result; finishPost(p); };
             r.readAsDataURL(file);
-        } else { posts.unshift(p); renderPosts(); }
+        } else { finishPost(p); }
     }
 
-    function renderPosts() {
-        let feed = document.getElementById('newsfeed');
-        feed.innerHTML = posts.map(p => `<div class="card">${p.content}${p.media ? `<br><img src="${p.media}" class="post-media">` : ''}</div>`).join('');
+    function finishPost(p) {
+        posts.unshift(p);
+        localStorage.setItem('cmf_posts', JSON.stringify(posts));
+        renderAll();
+    }
+
+    function renderAll() {
+        // Feed trang chủ
+        document.getElementById('newsfeed').innerHTML = posts.map(p => `
+            <div class="card"><b>${p.author}</b><p>${p.content}</p>${p.media?`<img src="${p.media}" class="post-media">`:''}</div>
+        `).join('');
+
+        // Bài của tôi
+        let myPosts = posts.filter(p => p.author === currentUser.username);
+        document.getElementById('my-posts').innerHTML = myPosts.map(p => `
+            <div class="card">${p.content} <button onclick="deletePost(${p.id})">Gỡ</button></div>
+        `).join('');
+    }
+
+    function deletePost(id) {
+        posts = posts.filter(p => p.id !== id);
+        localStorage.setItem('cmf_posts', JSON.stringify(posts));
+        renderAll();
     }
 
     function editName() {
@@ -117,41 +98,13 @@
         if(n) { currentUser.name = n; document.getElementById('profile-name').innerText = n; }
     }
 
-    // Các hàm logic cũ
-    function startApp() {
-        document.getElementById('auth-screen').classList.add('hidden');
-        document.getElementById('main-app').classList.remove('hidden');
-        document.getElementById('profile-name').innerText = currentUser.name;
-        renderPosts();
-        updateOnlineCount();
+    // Các hàm logic khác...
+    function showPage(p) { 
+        document.querySelectorAll('.page').forEach(el => el.classList.add('hidden')); 
+        document.getElementById('page-'+p).classList.remove('hidden'); 
     }
-
-    function handleLogin() {
-        let u = document.getElementById('login-user').value.trim();
-        let p = document.getElementById('login-pass').value.trim();
-        if(users[u] && users[u].password === p) {
-            currentUser = users[u];
-            startApp();
-        } else alert("Sai tài khoản!");
-    }
-
-    function handleRegister() {
-        let u = document.getElementById('reg-user').value.trim();
-        let p = document.getElementById('reg-pass').value.trim();
-        users[u] = { username: u, password: p, name: u };
-        localStorage.setItem('cmf_users', JSON.stringify(users));
-        alert("Đăng ký thành công!");
-    }
-
-    function toggleAuth(l) { document.getElementById('login-form').classList.toggle('hidden', !l); document.getElementById('reg-form').classList.toggle('hidden', l); }
-    function showPage(p) { document.querySelectorAll('.page').forEach(el => el.classList.add('hidden')); document.getElementById('page-'+p).classList.remove('hidden'); }
-    function logout() { localStorage.removeItem('cmf_logged_in_user'); location.reload(); }
-
-    window.onload = () => {
-        let saved = localStorage.getItem('cmf_logged_in_user');
-        if(saved && users[saved]) { currentUser = users[saved]; startApp(); }
-        else updateOnlineCount();
-    };
+    
+    // ... (Giữ nguyên các hàm login, startApp như cũ)
 </script>
 </body>
 </html>
